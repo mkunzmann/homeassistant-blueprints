@@ -1,0 +1,182 @@
+blueprint:
+  name: Homematic - 6 button remotes
+  description: |
+    When a button is pressed, the defined actions will be executed.
+    Please keep in mind, that long-press actions might be executed multiple times,
+    according to the configured minimum duration for long press.
+    This can be configured in the CCU.
+    Use long release to execute an long press action only once the button is released.
+
+    Heavily inspried by https://community.home-assistant.io/t/homematic-actions-for-hmip-wrc6-hm-pb-6-wm55/257035
+  domain: automation
+  input:
+    switch:
+        name: Homematic Device
+        description: |
+          Please select a Homematic 6 button remote entity of your Homematic
+          (not Homematic Cloud) integration by typing in the name of the device which was set in the CCU.
+        
+    action_channel_1_short:
+        name: Action
+        description: Channel 1 Button, Short Press
+        default: []
+        selector:
+            action: {}
+    action_channel_2_short:
+        name: Action
+        description: Channel 2 Button, Short Press
+        default: []
+        selector:
+            action: {}
+    action_channel_3_short:
+        name: Action
+        description: Channel 3 Button, Short Press
+        default: []
+        selector:
+            action: {}
+    action_channel_4_short:
+        name: Action
+        description: Channel 4 Button, Short Press
+        default: []
+        selector:
+            action: {}
+    action_channel_5_short:
+        name: Action
+        description: Channel 5 Button, Short Press
+        default: []
+        selector:
+            action: {}
+    action_channel_6_short:
+        name: Action
+        description: Channel 6 Button, Short Press
+        default: []
+        selector:
+            action: {}
+    action_channel_1_long:
+        name: Action
+        description: Channel 1 Button, Long Press
+        default: []
+        selector:
+            action: {}
+    action_channel_2_long:
+        name: Action
+        description: Channel 2 Button, Long Press
+        default: []
+        selector:
+            action: {}
+    action_channel_3_long:
+        name: Action
+        description: Channel 3 Button, Long Press
+        default: []
+        selector:
+            action: {}
+    action_channel_4_long:
+        name: Action
+        description: Channel 4 Button, Long Press
+        default: []
+        selector:
+            action: {}
+    action_channel_5_long:
+        name: Action
+        description: Channel 5 Button, Long Press
+        default: []
+        selector:
+            action: {}
+    action_channel_6_long:
+        name: Action
+        description: Channel 6 Button, Long Press
+        default: []
+        selector:
+            action: {}
+    action_channel_1_long_release:
+        name: Action
+        description: Channel 1 Button, Long Release
+        default: []
+        selector:
+            action: {}
+    action_channel_2_long_release:
+        name: Action
+        description: Channel 2 Button, Long Release
+        default: []
+        selector:
+            action: {}
+    action_channel_3_long_release:
+        name: Action
+        description: Channel 3 Button, Long Release
+        default: []
+        selector:
+            action: {}
+    action_channel_4_long_release:
+        name: Action
+        description: Channel 4 Button, Long Release
+        default: []
+        selector:
+            action: {}
+    action_channel_5_long_release:
+        name: Action
+        description: Channel 5 Button, Long Release
+        default: []
+        selector:
+            action: {}
+    action_channel_6_long_release:
+        name: Action
+        description: Channel 6 Button, Long Release
+        default: []
+        selector:
+            action: {}
+
+trigger:
+  - platform: event
+    event_type: homematic.keypress
+    event_data:
+      name: !input 'switch'
+      
+condition: []
+
+action:
+  - variables:
+      channel: '{{ trigger.event.data.channel }}'
+      param: '{{ trigger.event.data.param }}'
+      short: 'PRESS_SHORT'
+      long: 'PRESS_LONG'
+      long_release: 'PRESS_LONG_RELEASE'
+  - choose:
+      - conditions: "{{ channel == 1 and param == short }}"
+        sequence: !input 'action_channel_1_short'
+      - conditions: "{{ channel == 2 and param == short }}"
+        sequence: !input 'action_channel_2_short'
+      - conditions: "{{ channel == 3 and param == short }}"
+        sequence: !input 'action_channel_3_short'
+      - conditions: "{{ channel == 4 and param == short }}"
+        sequence: !input 'action_channel_4_short'
+      - conditions: "{{ channel == 5 and param == short }}"
+        sequence: !input 'action_channel_5_short'
+      - conditions: "{{ channel == 6 and param == short }}"
+        sequence: !input 'action_channel_6_short'
+      - conditions: "{{ channel == 1 and param == long }}"
+        sequence: !input 'action_channel_1_long'
+      - conditions: "{{ channel == 2 and param == long }}"
+        sequence: !input 'action_channel_2_long'
+      - conditions: "{{ channel == 3 and param == long }}"
+        sequence: !input 'action_channel_3_long'
+      - conditions: "{{ channel == 4 and param == long }}"
+        sequence: !input 'action_channel_4_long'
+      - conditions: "{{ channel == 5 and param == long }}"
+        sequence: !input 'action_channel_5_long'
+      - conditions: "{{ channel == 6 and param == long }}"
+        sequence: !input 'action_channel_6_long'
+      - conditions: "{{ channel == 1 and param == long_release }}"
+        sequence: !input 'action_channel_1_long_release'
+      - conditions: "{{ channel == 2 and param == long_release }}"
+        sequence: !input 'action_channel_2_long_release'
+      - conditions: "{{ channel == 3 and param == long_release }}"
+        sequence: !input 'action_channel_3_long_release'
+      - conditions: "{{ channel == 4 and param == long_release }}"
+        sequence: !input 'action_channel_4_long_release'
+      - conditions: "{{ channel == 5 and param == long_release }}"
+        sequence: !input 'action_channel_5_long_release'
+      - conditions: "{{ channel == 6 and param == long_release }}"
+        sequence: !input 'action_channel_6_long_release'
+
+mode: parallel
+max: 10
