@@ -1,5 +1,5 @@
 blueprint:
-  name: Actions for Homematic 4 button remotes
+  name: Homematic - 4 button remotes
   description: |
     When a button is pressed, the defined actions will be executed.
     Please keep in mind, that long-press actions might be executed multiple times,
@@ -22,21 +22,9 @@ blueprint:
         default: []
         selector:
             action: {}
-    action_channel_1_long:
-        name: Action
-        description: Channel 1 Button, Long Press
-        default: []
-        selector:
-            action: {}
     action_channel_2_short:
         name: Action
         description: Channel 2 Button, Short Press
-        default: []
-        selector:
-            action: {}
-    action_channel_2_long:
-        name: Action
-        description: Channel 2 Button, Long Press
         default: []
         selector:
             action: {}
@@ -46,15 +34,27 @@ blueprint:
         default: []
         selector:
             action: {}
-    action_channel_3_long:
-        name: Action
-        description: Channel 3 Button, Long Press
-        default: []
-        selector:
-            action: {}
     action_channel_4_short:
         name: Action
         description: Channel 4 Button, Short Press
+        default: []
+        selector:
+            action: {}
+    action_channel_1_long:
+        name: Action
+        description: Channel 1 Button, Long Press
+        default: []
+        selector:
+            action: {}
+    action_channel_2_long:
+        name: Action
+        description: Channel 2 Button, Long Press
+        default: []
+        selector:
+            action: {}
+    action_channel_3_long:
+        name: Action
+        description: Channel 3 Button, Long Press
         default: []
         selector:
             action: {}
