@@ -1,0 +1,86 @@
+blueprint:
+  name: Homematic - 2 button remotes
+  description: |
+    When a button is pressed, the defined actions will be executed.
+    Please keep in mind, that long-press actions might be executed multiple times,
+    according to the configured minimum duration for long press.
+    This can be configured in the CCU.
+    Use long release to execute an long press action only once the button is released.
+
+    Heavily inspried by https://community.home-assistant.io/t/homematic-actions-for-hmip-wrc6-hm-pb-6-wm55/257035
+  domain: automation
+  input:
+    switch:
+        name: Homematic Device
+        description: |
+          Please select a Homematic 2 button remote entity of your Homematic
+          (not Homematic Cloud) integration by typing in the name of the device which was set in the CCU.
+        
+    action_top_short:
+        name: Action
+        description: Channel 1 Button, Short Press
+        default: []
+        selector:
+            action: {}
+    action_bottom_short:
+        name: Action
+        description: Channel 2 Button, Short Press
+        default: []
+        selector:
+            action: {}
+    action_top_long:
+        name: Action
+        description: Channel 1 Button, Long Press
+        default: []
+        selector:
+            action: {}
+    action_bottom_long:
+        name: Action
+        description: Channel 2 Button, Long Press
+        default: []
+        selector:
+            action: {}
+    action_top_long_release:
+        name: Action
+        description: Channel 1 Button, Long Press Release
+        default: []
+        selector:
+            action: {}
+    action_bottom_long_release:
+        name: Action
+        description: Channel 2 Button, Long Press Release
+        default: []
+        selector:
+            action: {}
+
+trigger:
+  - platform: event
+    event_type: homematic.keypress
+    event_data:
+      name: !input 'switch'
+      
+condition: []
+
+action:
+  - variables:
+      channel: '{{ trigger.event.data.channel }}'
+      param: '{{ trigger.event.data.param }}'
+      short: 'PRESS_SHORT'
+      long: 'PRESS_LONG'
+      long_release: 'PRESS_LONG_RELEASE'
+  - choose:
+      - conditions: "{{ channel == 1 and param == short }}"
+        sequence: !input 'action_top_short'
+      - conditions: "{{ channel == 2 and param == short }}"
+        sequence: !input 'action_bottom_short'
+      - conditions: "{{ channel == 1 and param == long }}"
+        sequence: !input 'action_top_long'
+      - conditions: "{{ channel == 2 and param == long }}"
+        sequence: !input 'action_bottom_long'
+      - conditions: "{{ channel == 1 and param == long_release }}"
+        sequence: !input 'action_top_long_release'
+      - conditions: "{{ channel == 2 and param == long_release }}"
+        sequence: !input 'action_bottom_long_release'
+
+mode: parallel
+max: 10
