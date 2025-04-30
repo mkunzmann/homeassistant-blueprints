@@ -1,0 +1,67 @@
+blueprint:
+  name: Aqara W100 button
+  description: |
+    When a button is pressed, the defined actions will be executed.
+    Please keep in mind, that long-press actions might be executed multiple times.
+    Use long release to execute a long press action only once the button is released.
+
+    Heavily inspired by https://community.home-assistant.io/t/homematic-actions-for-hmip-wrc6-hm-pb-6-wm55/257035
+  domain: automation
+  input:
+    switch:
+        name: W100 device button
+        description: |
+          Please select a W100 button like event.climate_sensor_w100_button_3
+        
+    action_channel_1_short:
+        name: Action
+        description: Channel 1 Button, Short Press
+        default: []
+        selector:
+            action: {}
+    action_channel_1_double:
+        name: Action
+        description: Channel 1 Button, Double Press
+        default: []
+        selector:
+            action: {}
+    action_channel_1_long:
+        name: Action
+        description: Channel 1 Button, Long Press
+        default: []
+        selector:
+            action: {}
+    action_channel_1_long_release:
+        name: Action
+        description: Channel 1 Button, Long Release
+        default: []
+        selector:
+            action: {}
+
+trigger:
+  - platform: event
+    event_type: state_changed
+    event_data:
+      entity_id: !input 'switch'
+
+condition: []
+
+action:
+  - variables:
+      param: '{{ trigger.event.data.new_state.attributes.event_type }}'
+      short: 'multi_press_1'
+      double: 'multi_press_2'
+      long: 'long_press'
+      long_release: 'long_release'
+  - choose:
+      - conditions: "{{ param == short }}"
+        sequence: !input 'action_channel_1_short'
+      - conditions: "{{ param == double }}"
+        sequence: !input 'action_channel_1_double'
+      - conditions: "{{ param == long }}"
+        sequence: !input 'action_channel_1_long'
+      - conditions: "{{ param == long_release }}"
+        sequence: !input 'action_channel_1_long_release'
+
+mode: parallel
+max: 10
