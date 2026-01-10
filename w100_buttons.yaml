@@ -6,6 +6,9 @@ blueprint:
     Use long release to execute a long press action only once the button is released.
 
     Heavily inspired by https://community.home-assistant.io/t/homematic-actions-for-hmip-wrc6-hm-pb-6-wm55/257035
+
+    Version 2
+    Ingoring unknown and unavailable previous states
   domain: automation
   input:
     switch:
@@ -39,16 +42,20 @@ blueprint:
             action: {}
 
 trigger:
-  - platform: event
-    event_type: state_changed
-    event_data:
-      entity_id: !input 'switch'
+  - platform: state
+    entity_id: !input 'switch'
+    not_from:
+      - unavailable
+      - unknown
+    not_to:
+      - unavailable
+      - unknown
 
 condition: []
 
 action:
   - variables:
-      param: '{{ trigger.event.data.new_state.attributes.event_type }}'
+      param: '{{ trigger.to_state.attributes.event_type }}'
       short: 'multi_press_1'
       double: 'multi_press_2'
       long: 'long_press'
